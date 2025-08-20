@@ -70,8 +70,7 @@ export function CacheStatusPanel() {
     } catch (error) {
       console.error('Failed to clear cache:', error);
     } finally {
-        setLoading(false);
-      }
+      setLoading(false);
     }
   };
 

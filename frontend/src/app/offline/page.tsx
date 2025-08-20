@@ -51,10 +51,7 @@ export default function OfflinePage() {
   ];
 
   return (
-    <div 
-      className="min-h-screen flex items-center justify-center p-4 bg-background text-foreground"
-      style={{ background: 'hsl(var(--background))', color: 'hsl(var(--foreground))' }}
-    >
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background text-foreground">
       <div className="w-full max-w-md space-y-6">
         <Card>
           <CardHeader className="text-center">
