@@ -47,6 +47,8 @@ export function CacheStatusPanel() {
   }, []);
 
   const loadCacheStatus = async () => {
+    if (!cacheManager) return;
+    
     setLoading(true);
     try {
       const status = await cacheManager.getCacheStatus();
@@ -59,14 +61,15 @@ export function CacheStatusPanel() {
   };
 
   const clearSpecificCache = async (cacheType: keyof CacheStatus) => {
-    if (confirm(`确定要清除${getCacheTypeName(cacheType)}缓存吗？`)) {
-      setLoading(true);
-      try {
-        await cacheManager.clearCache(cacheType);
-        await loadCacheStatus();
-      } catch (error) {
-        console.error('Failed to clear cache:', error);
-      } finally {
+    if (!cacheManager || !confirm(`确定要清除${getCacheTypeName(cacheType)}缓存吗？`)) return;
+    
+    setLoading(true);
+    try {
+      await cacheManager.clearCache(cacheType);
+      await loadCacheStatus();
+    } catch (error) {
+      console.error('Failed to clear cache:', error);
+    } finally {
         setLoading(false);
       }
     }
@@ -76,7 +79,9 @@ export function CacheStatusPanel() {
     if (confirm('确定要清除所有缓存吗？这将删除所有离线内容。')) {
       setLoading(true);
       try {
-        await cacheManager.clearAllCaches();
+        if (cacheManager) {
+          await cacheManager.clearAllCaches();
+        }
         await loadCacheStatus();
       } catch (error) {
         console.error('Failed to clear all caches:', error);

@@ -18,6 +18,11 @@ export class CacheManager {
   }
 
   private async waitForServiceWorker(): Promise<ServiceWorkerRegistration | null> {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+      return null;
+    }
+    
     if ('serviceWorker' in navigator) {
       try {
         const registration = await navigator.serviceWorker.ready;
@@ -141,6 +146,10 @@ export class CacheManager {
    * Check if the app is offline
    */
   isOffline(): boolean {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+      return false; // Assume online during SSR
+    }
     return !navigator.onLine;
   }
 
@@ -183,8 +192,8 @@ export class CacheManager {
   }
 }
 
-// Export singleton instance
-export const cacheManager = CacheManager.getInstance();
+// Export singleton instance - only create in browser
+export const cacheManager = typeof window !== 'undefined' ? CacheManager.getInstance() : null;
 
 // Hook for React components
 export function useCacheManager() {

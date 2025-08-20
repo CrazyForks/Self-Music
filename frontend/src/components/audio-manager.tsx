@@ -200,13 +200,15 @@ export function AudioManager() {
     console.log('Loading new song:', currentSong.title, 'URL:', audioUrl);
     
     // Cache the current song resources for offline playback
-    cacheManager.preloadSong({
-      id: currentSong.id,
-      audioUrl: audioUrl,
-      coverUrl: currentSong.coverUrl
-    }).catch(error => {
-      console.log('Failed to cache song resources:', error);
-    });
+    if (cacheManager) {
+      cacheManager.preloadSong({
+        id: currentSong.id,
+        audioUrl: audioUrl,
+        coverUrl: currentSong.coverUrl
+      }).catch(error => {
+        console.log('Failed to cache song resources:', error);
+      });
+    }
     
     // 检查是否是新的音频源
     if (audio.src !== audioUrl) {
