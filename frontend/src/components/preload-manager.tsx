@@ -21,7 +21,7 @@ export function PreloadManager({ songs = [], onPreloadComplete }: PreloadManager
   const [preloadedCount, setPreloadedCount] = useState(0);
 
   const handlePreloadAll = async () => {
-    if (songs.length === 0) return;
+    if (songs.length === 0 || !cacheManager) return;
     
     setIsPreloading(true);
     setPreloadedCount(0);
@@ -45,6 +45,8 @@ export function PreloadManager({ songs = [], onPreloadComplete }: PreloadManager
   };
 
   const handlePreloadCurrent = async (song: { id: string; title: string; audioUrl?: string; coverUrl?: string }) => {
+    if (!cacheManager) return;
+    
     try {
       await cacheManager.preloadSong(song);
     } catch (error) {
