@@ -40,12 +40,25 @@ const ESSENTIAL_CACHE_URLS = [
 
 // Utility functions
 function isAudioRequest(url) {
-  return url.includes('/api/songs/') && url.includes('/stream');
+  // Check for API streaming endpoints
+  if (url.includes('/api/songs/') && url.includes('/stream')) {
+    return true;
+  }
+
+  // Check for audio file extensions (with or without query parameters)
+  const urlWithoutQuery = url.split('?')[0];
+  return urlWithoutQuery.match(/\.(mp3|wav|flac|aac|ogg|m4a|wma|opus)$/i);
 }
 
 function isCoverRequest(url) {
-  return url.includes('/api/') && (url.includes('cover') || url.includes('image')) ||
-         url.match(/\.(jpg|jpeg|png|webp|gif)$/i);
+  // Check for API cover/image endpoints
+  if (url.includes('/api/') && (url.includes('cover') || url.includes('image'))) {
+    return true;
+  }
+
+  // Check for image file extensions (with or without query parameters)
+  const urlWithoutQuery = url.split('?')[0];
+  return urlWithoutQuery.match(/\.(jpg|jpeg|png|webp|gif|bmp|svg|ico|avif)$/i);
 }
 
 function isApiRequest(url) {
